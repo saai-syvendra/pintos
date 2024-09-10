@@ -93,6 +93,9 @@ struct thread
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
 
+    // Alarm Clock
+    int64_t wakeup;
+
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
@@ -137,5 +140,12 @@ int thread_get_nice (void);
 void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
+
+// Alarm Clock
+void thread_sleep(int64_t ticks);
+void thread_awake(int64_t ticks);
+
+void thread_test_preemption (void);
+bool thread_compare_priority (struct list_elem *l, struct list_elem *s, void *aux UNUSED);
 
 #endif /* threads/thread.h */
