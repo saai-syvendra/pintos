@@ -24,6 +24,10 @@ typedef int tid_t;
 #define PRI_DEFAULT 31                  /* Default priority. */
 #define PRI_MAX 63                      /* Highest priority. */
 
+#define NICE_DEFAULT 0
+#define RECENT_CPU_DEFAULT 0
+#define LOAD_AVG_DEFAULT 0
+
 /* A kernel thread or user process.
 
    Each thread structure is stored in its own 4 kB page.  The
@@ -102,6 +106,9 @@ struct thread
     struct list donations;
     struct list_elem donation_elem;
 
+    int nice;
+    int recent_cpu;
+
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
@@ -158,5 +165,12 @@ bool thread_compare_donate_priority (const struct list_elem *l, const struct lis
 void donate_priority (void);
 void remove_with_lock (struct lock *lock);
 void refresh_priority (void);
+
+void mlfqs_recalculate_priority (void);
+void mlfqs_recalculate_recent_cpu (void);
+void mlfqs_increment_recent_cpu (void);
+void mlfqs_calculate_load_avg (void);
+void mlfqs_calculate_recent_cpu (struct thread *t);
+void mlfqs_calculate_priority (struct thread *t);
 
 #endif /* threads/thread.h */
